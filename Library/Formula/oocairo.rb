@@ -11,7 +11,12 @@ class Oocairo < Formula
   end
 
   def test
+<<<<<<< Updated upstream
     # this will fail we won't accept that, make it test the program works!
+=======
+    # oocairo and oopango have Lua based test systems...just need to figure out
+    # how to get them to run
+>>>>>>> Stashed changes
     system "/usr/bin/false"
   end
 end
