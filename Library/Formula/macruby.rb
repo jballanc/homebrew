@@ -17,7 +17,7 @@ class Macruby < Formula
   def install
     framework = prefix.join('Library/Framework/')
     framework.mkpath
-    rake_args = "framework_instdir=#{framework} sym_instdir=#{prefix}"
+    rake_args = "framework_instdir=#{framework}"
     system "/usr/bin/rake all #{rake_args}"
     system "/usr/bin/rake install #{rake_args}"
   end
@@ -89,3 +89,37 @@ index 3df3e31..686b6b6 100644
        @cflags << ' -I./icu-1060'
        @cxxflags << ' -I./icu-1060'
      end
+diff --git a/instruby.rb b/instruby.rb
+index 16af291..4b0768b 100755
+--- a/instruby.rb
++++ b/instruby.rb
+@@ -490,8 +490,8 @@ if RUBY_FRAMEWORK
+     next if bin[0] == '.'
+     # Except rb_nibtool & llc!
+     next if bin == 'rb_nibtool' or bin == 'llc'
+-    link = File.join("../../../", CONFIG['bindir'], bin)
+-    link.sub!(/#{install_version}/, 'Current')
++    link = File.join(CONFIG['bindir'], bin)
++    link[link.rindex(install_version), install_version.length] = "Current"
+     ln_sfh link, File.join(dest_bin, File.basename(bin))
+   end
+   # Installing man pages links.
+@@ -503,14 +503,14 @@ if RUBY_FRAMEWORK
+       mkdir_p File.join(dest_man, File.basename(mandir)), :mode => 0755
+       Dir.entries(File.join(with_destdir(CONFIG['mandir']), mandir)).each do |man|
+         next if man[0] == '.'
+-        link = File.join("../../../../../", CONFIG['mandir'], mandir, man)
+-        link.sub!(/#{install_version}/, 'Current')
++        link = File.join(CONFIG['mandir'], mandir)
++        link[link.rindex(install_version), install_version.length] = "Current"
+         ln_sfh link, File.join(dest_man, File.basename(mandir), 
+	  File.basename(man))
+       end
+     else
+-      link = File.join("../../../../", CONFIG['mandir'], mandir)
+-      link.sub!(/#{install_version}/, 'Current')
++      link = File.join(CONFIG['mandir'], mandir)
++      link[link.rindex(install_version), install_version.length] = "Current"
+       ln_sfh link, File.join(dest_man, File.basename(mandir))
+     end
+   end
